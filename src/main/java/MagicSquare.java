@@ -1,14 +1,10 @@
-import javafx.geometry.Pos;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MagicSquare {
 
     public static void main(String[] args) {
-        int n = 5;
+        int n = 3;
         int [][] matrix = new int[n][n];
-        process(matrix,new Position(n/2,n-1), 1, n);
+        printMatrix(process(matrix, new Position(n / 2, n - 1, null), 0, n));
     }
 
     private static int[][] process(int[][] matrix, Position position, int acc, int n) {
@@ -27,22 +23,32 @@ public class MagicSquare {
                             // IF if there is no cells up and left
                             // THEN move to lower border and move one column right ibo repeat STEP1
 
-        // [MAIN ACTION is to iterate 1up 1r]
-
-        // [CHECK LIST:
-        // 1. IF lrb AND urp THEN goto llb 1ru THEN MA
-        // 2. IF tb AND rcp THEN goto br 1r AND MA
-        // 3. IF
-
-        // 5 checks
 
         // [LAST CHECK end work if every previous check returns false
-
-
+        if (n%2 == 0) return matrix;
         if (position.row == n/2 && position.column == 0) {
+            acc++;
+            matrix[position.row][position.column] = acc;
             return matrix;
         } else {
-             return process(/*current matrix*/ null,/*next position*/ null, /*accumulator*/ acc, /*matrix size*/ n);
+            if (position.row >= 0 && position.row < n && position.column < n) {
+                if (matrix[position.row][position.column] == 0) {
+                    acc++;
+                    matrix[position.row][position.column] = acc;
+                    return process(matrix, new Position(position.row - 1, position.column + 1, position), acc, n);
+                } else {
+                    return process(matrix, new Position(position.previous.row, position.previous.column -1, position), acc, n);
+                }
+            } else {
+                if (position.previous.row == 0 && position.previous.column == n-1) {
+                    return process(matrix, new Position(position.previous.row,position.previous.column - 1, position.previous), acc, n);
+                } else   if (position.previous.row == 0) {
+                    return process(matrix, new Position(n-1, position.previous.column + 1, position.previous), acc, n);
+                } else if (position.previous.column == n-1) {
+                    return process(matrix, new Position(position.previous.row - 1, 0,position.previous ), acc, n);
+                }
+            }
+            return matrix;
         }
 
     }
@@ -62,24 +68,21 @@ public class MagicSquare {
         for (int[] aMatrix : matrix) {
             System.out.println("");
             for (int anAMatrix : aMatrix) {
-                System.out.print(anAMatrix + " ");
+                System.out.print("[" +anAMatrix + "] ");
             }
         }
     }
 
     private static class Position {
-
         int row;
         int column;
+        Position previous;
 
-        Position(int row, int column) {
+        Position(int row, int column, Position previous) {
             this.row = row;
             this.column = column;
+            this.previous = previous;
         }
-        static Position position(int row, int column) {
-            return new Position(row, column);
-        }
-
     }
 
 }
