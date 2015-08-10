@@ -1,38 +1,43 @@
 /*http://interactivepython.org/runestone/static/pythonds/index.html*/
 
+import java.util.*;
+
 public class BinarySearch {
 
-    public static void main(String[] args) {
+    static boolean isFound = false;
 
-        int[] arr = new int[10];
+    public static void main(String[] args) {
+        Integer[] arr = new Integer[100];
         fillArrayWithTestvalues(arr);
-        performSearch(arr, arr.length - 1, 3);
+        for (int i = 0; i < arr.length - 1; i++) {
+            System.out.println(performSearch(arr, i));
+        }
     }
 
-    public static boolean performSearch(int[] arr, int thresholdPosition, int searchItem) {
+    public static boolean performSearch(Integer[] arr, int searchItem) {
 
-        if (arr.length == 0) return false;
-        if (searchItem > arr.length) return false;
+        if (searchItem > arr[arr.length - 1] || searchItem < 0)
+            return isFound;
 
-        // check for odd length of array
-//      if arr.length == 2 then use sequential search?
-        if (searchItem == arr[thresholdPosition]) {
+        if (searchItem == arr[0] || searchItem == arr[arr.length - 1] || searchItem == arr[arr.length / 2]) { // bad
+            isFound = true;
             return true;
-        } else if (searchItem > arr[thresholdPosition]) {
-            thresholdPosition = thresholdPosition / 2;
-            return performSearch(arr, thresholdPosition, searchItem);
-        } else {
-            thresholdPosition = thresholdPosition / 2;
-            return performSearch(arr, thresholdPosition, searchItem);
         }
 
+        if (searchItem > arr[arr.length / 2]) {
+            performSearch(Arrays.copyOfRange(arr, arr.length / 2, arr.length - 1), searchItem);
+        } else {
+            performSearch(Arrays.copyOfRange(arr, 0, arr.length / 2), searchItem);
+        }
+
+        return isFound;
+
     }
 
-    private static void fillArrayWithTestvalues(int[] arr) {
+    private static void fillArrayWithTestvalues(Integer[] arr) {
         for (int i = 0; i < arr.length; i++) {
             arr[i] = i;
         }
     }
-
 
 }
