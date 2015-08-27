@@ -7,7 +7,7 @@ public class BinarySearch {
     static boolean isFound = false;
 
     public static void main(String[] args) {
-        Integer[] arr = new Integer[100];
+        Integer[] arr = new Integer[1000];
         fillArrayWithTestvalues(arr);
         for (int i = 0; i < arr.length - 1; i++) {
             System.out.println(performSearch(arr, i));
